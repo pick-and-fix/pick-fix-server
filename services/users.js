@@ -19,3 +19,12 @@ exports.createUser = async (userInfo) => {
     email: user.email,
   };
 };
+
+exports.findUser = async (userId) => {
+  const user = await User.findById(userId);
+
+  return {
+    name: user.name,
+    email: user.email,
+  };
+};
