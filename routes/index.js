@@ -1,9 +1,10 @@
-let express = require("express");
-let router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
+const verifyFirebaseToken = require("../routes/middelwares/verifyFirebaseToken");
+const userController = require("../controllers/users");
+
+router.get("/user/:userId", userController.getUserInfo);
+router.post("/login", verifyFirebaseToken, userController.getLogin);
 
 module.exports = router;
