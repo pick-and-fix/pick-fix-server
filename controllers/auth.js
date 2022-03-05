@@ -1,7 +1,7 @@
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 
-const userService = require("../services/users");
+const userService = require("../services/auth");
 
 exports.getUserInfo = async (req, res, next) => {
   const { userId } = req.params;
@@ -27,7 +27,9 @@ exports.getLogin = async (req, res, next) => {
   try {
     const { id, name, email } = await userService.createUser(userInfo);
 
-    const accessToken = await jwt.sign(userInfo, process.env.SECRET_KEY);
+    const accessToken = await jwt.sign(userInfo, process.env.SECRET_KEY, {
+      expiresIn: "2h",
+    });
 
     res.json({
       result: "success",
@@ -46,6 +48,8 @@ exports.getLogin = async (req, res, next) => {
           message: "Database Error",
         },
       });
+
+      return;
     }
 
     next(createError(500, "Invalid Server Error"));
