@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const mongooseLoader = require("./loaders/mongooseLoader");
-const index = require("./routes/index");
+const auth = require("./routes/auth");
 const users = require("./routes/users");
 
 mongooseLoader();
@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use("/", index);
+app.use("/", auth);
 app.use("/users", users);
 
 app.use(function (req, res, next) {

@@ -10,6 +10,11 @@ const PlanSchema = new Schema({
     type: String,
     required: [true, "Place must be required"],
   },
+  placeLocation: [
+    {
+      type: String,
+    },
+  ],
   date: {
     type: String,
     required: [true, "Date must be required"],
@@ -18,15 +23,14 @@ const PlanSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "Friends must be required"],
     },
   ],
-  voting: [Object],
+  voting: Object,
   pickNumber: {
     type: Number,
     required: [true, "Pick Number must be required"],
   },
-  pick: [
+  picks: [
     {
       type: Schema.Types.ObjectId,
       ref: "Pick",
