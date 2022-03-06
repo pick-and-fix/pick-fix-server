@@ -12,7 +12,7 @@ const PlanSchema = new Schema({
   },
   placeLocation: [
     {
-      type: String,
+      type: Number,
     },
   ],
   date: {
