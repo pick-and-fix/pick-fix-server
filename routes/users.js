@@ -7,5 +7,6 @@ const myPickController = require("../controllers/myPick");
 
 router.get("/:userId/planlist", verifyToken, planListController.getPlanList);
 router.get("/:userId/mypick", verifyToken, myPickController.getMyPicks);
+router.post("/:userId/mypick/new", verifyToken, myPickController.saveNewMyPick);
 
 module.exports = router;
