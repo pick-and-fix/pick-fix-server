@@ -29,3 +29,29 @@ exports.getMyPicks = async (req, res, next) => {
     next(createError(500, "Invalid Server Error"));
   }
 };
+
+exports.saveNewMyPick = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { newPick } = req.body;
+
+    if (!ObjectId.isValid(userId)) {
+      res.status(400).json({
+        result: "fail",
+        error: {
+          message: "Not Valid ObjectId",
+        },
+      });
+
+      return;
+    }
+
+    await myPickService.saveNewPick({ userId, newPick });
+
+    res.json({
+      result: "success",
+    });
+  } catch (err) {
+    next(createError(500, "Invalid Server Error"));
+  }
+};

@@ -20,3 +20,11 @@ exports.getPicks = async (userId) => {
 
   return picks;
 };
+
+exports.saveNewPick = async ({ userId, newPick }) => {
+  const savedNewPick = await Pick.create(newPick);
+
+  await User.findByIdAndUpdate(userId, {
+    $push: { picks: savedNewPick._id },
+  }).exec();
+};
