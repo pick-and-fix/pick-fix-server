@@ -15,7 +15,7 @@ exports.getPlans = async (userId) => {
 
     afterSixTime.setHours(afterSixTime.getHours() + 6);
 
-    if (nowTime < afterSixTime) {
+    if (nowTime < afterSixTime && plan.isFixed) {
       plans[plan._id] = {
         place: plan.place,
         date: plan.date,
