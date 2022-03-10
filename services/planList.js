@@ -9,7 +9,6 @@ exports.getPlans = async (userId) => {
     populate: { path: "friends" },
   });
 
-  console.log("list>>", list);
   list.plans.map((plan) => {
     const afterSixTime = new Date(plan.date);
     const nowTime = new Date();

@@ -19,4 +19,7 @@ router.post(
   validator(checkEmailValue),
   makeAPlanController.checkEmail
 );
+
+router.post("/:userId/plan", verifyToken, makeAPlanController.createNewPlan);
+
 module.exports = router;
