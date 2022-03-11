@@ -17,6 +17,8 @@ exports.getVotes = async (userId) => {
         placeLocation: plan.placeLocation,
         date: plan.date,
         friends: plan.friends,
+        pickNumber: plan.pickNumber,
+        voting: plan.voting,
         picks: [],
         isVoted: false,
         isFixed: false,
@@ -58,4 +60,12 @@ exports.getAllPick = async ({ userId, planId }) => {
     friendsPicks,
     place,
   };
+};
+
+exports.saveVote = async ({ userId, planId, vote }) => {
+  const voteInfo = { id: userId, vote: vote };
+
+  await Plan.findByIdAndUpdate(planId, {
+    $push: { voting: voteInfo },
+  }).exec();
 };
