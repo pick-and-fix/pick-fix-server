@@ -29,4 +29,9 @@ router.post(
   verifyToken,
   voteController.savePickVote
 );
+router.get(
+  "/:userId/plan/:planId/vote/result",
+  verifyToken,
+  voteController.getVoteResult
+);
 module.exports = router;
