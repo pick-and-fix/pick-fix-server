@@ -24,5 +24,9 @@ router.post("/:userId/plan", verifyToken, makeAPlanController.createNewPlan);
 
 router.get("/:userId/plan/votelist", verifyToken, voteController.getVoteList);
 router.get("/:userId/plan/:planId/vote", verifyToken, voteController.getPicks);
-
+router.post(
+  "/:userId/plan/:planId/vote/new",
+  verifyToken,
+  voteController.savePickVote
+);
 module.exports = router;

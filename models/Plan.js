@@ -25,7 +25,7 @@ const PlanSchema = new Schema({
       ref: "User",
     },
   ],
-  voting: Object,
+  voting: Array,
   pickNumber: {
     type: Number,
     required: [true, "Pick Number must be required"],
