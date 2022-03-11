@@ -1,3 +1,4 @@
+const Plan = require("../models/Plan");
 const User = require("../models/User");
 
 exports.getVotes = async (userId) => {
@@ -24,4 +25,37 @@ exports.getVotes = async (userId) => {
   });
 
   return votes;
+};
+
+exports.getAllPick = async ({ userId, planId }) => {
+  const friendsPicks = {};
+
+  const picks = await Plan.findById(planId).populate({
+    path: "friends",
+    populate: { path: "picks" },
+  });
+
+  const place = {
+    place: picks.place,
+    placeLocation: picks.placeLocation,
+  };
+
+  picks.friends.map((data) => {
+    data.picks.map((pick) => {
+      friendsPicks[pick._id] = {
+        author: pick.author,
+        name: pick.name,
+        address: pick.address,
+        rating: pick.rating,
+        type: pick.type,
+        image: pick.image,
+        location: pick.location,
+      };
+    });
+  });
+
+  return {
+    friendsPicks,
+    place,
+  };
 };
