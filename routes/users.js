@@ -23,5 +23,6 @@ router.post(
 router.post("/:userId/plan", verifyToken, makeAPlanController.createNewPlan);
 
 router.get("/:userId/plan/votelist", verifyToken, voteController.getVoteList);
+router.get("/:userId/plan/:planId/vote", verifyToken, voteController.getPicks);
 
 module.exports = router;
