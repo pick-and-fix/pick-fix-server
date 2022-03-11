@@ -10,7 +10,7 @@ exports.getVotes = async (userId) => {
   });
 
   voteList.plans.map((plan) => {
-    if (!plan.isVoted) {
+    if (!plan.isFixed) {
       votes[plan._id] = {
         creator: plan.creator,
         place: plan.place,
@@ -68,4 +68,14 @@ exports.saveVote = async ({ userId, planId, vote }) => {
   await Plan.findByIdAndUpdate(planId, {
     $push: { voting: voteInfo },
   }).exec();
+};
+
+exports.getResult = async (planId) => {
+  const plan = await Plan.findById(planId);
+
+  return plan;
+};
+
+exports.updateVoteState = async (planId) => {
+  await Plan.findByIdAndUpdate(planId, { isVoted: true });
 };
