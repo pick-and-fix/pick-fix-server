@@ -17,9 +17,16 @@ exports.getPlans = async (userId) => {
 
     if (nowTime < afterSixTime && plan.isFixed) {
       plans[plan._id] = {
+        creator: plan.creator,
         place: plan.place,
+        placeLocation: plan.placeLocation,
         date: plan.date,
         friends: plan.friends,
+        pickNumber: plan.pickNumber,
+        picks: plan.picks,
+        isVoted: plan.isVoted,
+        isFixed: plan.isFixed,
+        voting: plan.voting,
       };
     }
   });

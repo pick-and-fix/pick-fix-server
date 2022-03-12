@@ -1,5 +1,6 @@
 const Plan = require("../models/Plan");
 const User = require("../models/User");
+const Pick = require("../models/Pick");
 
 exports.getVotes = async (userId) => {
   const votes = {};
@@ -78,4 +79,25 @@ exports.getResult = async (planId) => {
 
 exports.updateVoteState = async (planId) => {
   await Plan.findByIdAndUpdate(planId, { isVoted: true });
+};
+
+exports.saveFix = async ({ planId, finalPicks }) => {
+  const picks = {};
+
+  for (let i = 0; i < finalPicks.length; i++) {
+    const pick = await Pick.findOne({ name: finalPicks[i] });
+
+    picks[pick._id] = {
+      author: pick.author,
+      name: pick.name,
+      address: pick.address,
+      rating: pick.rating,
+      image: pick.image,
+      type: pick.type,
+      location: pick.location,
+    };
+  }
+
+  await Plan.findByIdAndUpdate(planId, { picks: picks });
+  await Plan.findByIdAndUpdate(planId, { isFixed: true });
 };

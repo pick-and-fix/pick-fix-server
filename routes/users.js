@@ -34,4 +34,9 @@ router.get(
   verifyToken,
   voteController.getVoteResult
 );
+router.post(
+  "/:userId/plan/:planId/vote/fix",
+  verifyToken,
+  voteController.saveFinalPick
+);
 module.exports = router;
