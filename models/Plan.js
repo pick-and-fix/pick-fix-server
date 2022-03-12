@@ -30,12 +30,7 @@ const PlanSchema = new Schema({
     type: Number,
     required: [true, "Pick Number must be required"],
   },
-  picks: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Pick",
-    },
-  ],
+  picks: Object,
   isVoted: Boolean,
   isFixed: Boolean,
 });

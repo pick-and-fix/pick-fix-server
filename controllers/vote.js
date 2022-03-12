@@ -157,3 +157,40 @@ exports.getVoteResult = async (req, res, next) => {
     next(createError(500, "Invalid Server Error"));
   }
 };
+
+exports.saveFinalPick = async (req, res, next) => {
+  try {
+    const { userId, planId } = req.params;
+    const { finalPicks } = req.body;
+
+    if (!ObjectId.isValid(userId)) {
+      res.status(400).json({
+        result: "fail",
+        error: {
+          message: "Not Valid ObjectId",
+        },
+      });
+
+      return;
+    }
+
+    if (!ObjectId.isValid(planId)) {
+      res.status(400).json({
+        result: "fail",
+        error: {
+          message: "Not Valid ObjectId",
+        },
+      });
+
+      return;
+    }
+
+    await voteService.saveFix({ planId, finalPicks });
+
+    res.json({
+      result: "success",
+    });
+  } catch (err) {
+    next(createError(500, "Invalid Server Error"));
+  }
+};
