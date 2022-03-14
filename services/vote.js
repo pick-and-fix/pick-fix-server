@@ -11,7 +11,10 @@ exports.getVotes = async (userId) => {
   });
 
   voteList.plans.map((plan) => {
-    if (!plan.isFixed) {
+    const nowTime = new Date();
+    const planTime = new Date(plan.date);
+
+    if (!plan.isFixed && nowTime < planTime) {
       votes[plan._id] = {
         creator: plan.creator,
         place: plan.place,
