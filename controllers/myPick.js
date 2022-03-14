@@ -46,10 +46,11 @@ exports.saveNewMyPick = async (req, res, next) => {
       return;
     }
 
-    await myPickService.saveNewPick({ userId, newPick });
+    const savedNewPick = await myPickService.saveNewPick({ userId, newPick });
 
     res.json({
       result: "success",
+      data: savedNewPick,
     });
   } catch (err) {
     next(createError(500, "Invalid Server Error"));

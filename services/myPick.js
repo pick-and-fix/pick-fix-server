@@ -27,4 +27,6 @@ exports.saveNewPick = async ({ userId, newPick }) => {
   await User.findByIdAndUpdate(userId, {
     $push: { picks: savedNewPick._id },
   }).exec();
+
+  return savedNewPick;
 };
