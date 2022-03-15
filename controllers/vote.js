@@ -3,6 +3,11 @@ const { ObjectId } = mongoose.Types;
 const createError = require("http-errors");
 
 const voteService = require("../services/vote");
+const {
+  RESULT_MESSAGE,
+  ERROR_MESSAGE,
+  DATA_MESSAGE,
+} = require("../constants/response");
 
 exports.getVoteList = async (req, res, next) => {
   try {
@@ -10,9 +15,9 @@ exports.getVoteList = async (req, res, next) => {
 
     if (!ObjectId.isValid(userId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -22,11 +27,11 @@ exports.getVoteList = async (req, res, next) => {
     const votes = await voteService.getVotes(userId);
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
       data: votes,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
@@ -34,22 +39,11 @@ exports.getPicks = async (req, res, next) => {
   try {
     const { userId, planId } = req.params;
 
-    if (!ObjectId.isValid(userId)) {
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(planId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
-        },
-      });
-
-      return;
-    }
-
-    if (!ObjectId.isValid(planId)) {
-      res.status(400).json({
-        result: "fail",
-        error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -59,11 +53,11 @@ exports.getPicks = async (req, res, next) => {
     const picks = await voteService.getAllPick({ userId, planId });
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
       data: picks,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
@@ -72,22 +66,11 @@ exports.savePickVote = async (req, res, next) => {
     const { userId, planId } = req.params;
     const { vote } = req.body;
 
-    if (!ObjectId.isValid(userId)) {
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(planId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
-        },
-      });
-
-      return;
-    }
-
-    if (!ObjectId.isValid(planId)) {
-      res.status(400).json({
-        result: "fail",
-        error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -97,10 +80,10 @@ exports.savePickVote = async (req, res, next) => {
     await voteService.saveVote({ userId, planId, vote });
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
@@ -108,22 +91,11 @@ exports.getVoteResult = async (req, res, next) => {
   try {
     const { userId, planId } = req.params;
 
-    if (!ObjectId.isValid(userId)) {
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(planId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
-        },
-      });
-
-      return;
-    }
-
-    if (!ObjectId.isValid(planId)) {
-      res.status(400).json({
-        result: "fail",
-        error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -136,8 +108,8 @@ exports.getVoteResult = async (req, res, next) => {
 
     if (voteResult.voting.length !== totalPeople) {
       res.json({
-        result: "success",
-        data: "ongoing",
+        result: RESULT_MESSAGE.success,
+        data: DATA_MESSAGE.ongoing,
       });
 
       return;
@@ -147,14 +119,14 @@ exports.getVoteResult = async (req, res, next) => {
       await voteService.updateVoteState(planId);
 
       res.json({
-        result: "success",
+        result: RESULT_MESSAGE.success,
         data: voteResult.voting,
       });
 
       return;
     }
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
@@ -163,22 +135,11 @@ exports.saveFinalPick = async (req, res, next) => {
     const { userId, planId } = req.params;
     const { finalPicks } = req.body;
 
-    if (!ObjectId.isValid(userId)) {
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(planId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
-        },
-      });
-
-      return;
-    }
-
-    if (!ObjectId.isValid(planId)) {
-      res.status(400).json({
-        result: "fail",
-        error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -188,9 +149,9 @@ exports.saveFinalPick = async (req, res, next) => {
     await voteService.saveFix({ planId, finalPicks });
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };

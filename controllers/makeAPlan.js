@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Types;
 const createError = require("http-errors");
 
 const makeAPlanService = require("../services/makeAPlan");
+const { RESULT_MESSAGE, ERROR_MESSAGE } = require("../constants/response");
 
 exports.checkEmail = async (req, res, next) => {
   const { email } = req.body;
@@ -11,9 +12,9 @@ exports.checkEmail = async (req, res, next) => {
 
     if (!user) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Found Email",
+          message: ERROR_MESSAGE.notFoundEmail,
         },
       });
 
@@ -21,14 +22,14 @@ exports.checkEmail = async (req, res, next) => {
     }
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
       data: {
         userId: user._id,
         name: user.name,
       },
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
@@ -39,9 +40,9 @@ exports.createNewPlan = async (req, res, next) => {
   try {
     if (!ObjectId.isValid(userId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -54,9 +55,9 @@ exports.createNewPlan = async (req, res, next) => {
     });
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };

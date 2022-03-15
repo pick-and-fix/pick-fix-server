@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Types;
 const createError = require("http-errors");
 
 const myPickService = require("../services/myPick");
+const { RESULT_MESSAGE, ERROR_MESSAGE } = require("../constants/response");
 
 exports.getMyPicks = async (req, res, next) => {
   try {
@@ -10,9 +11,9 @@ exports.getMyPicks = async (req, res, next) => {
 
     if (!ObjectId.isValid(userId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -22,11 +23,11 @@ exports.getMyPicks = async (req, res, next) => {
     const picks = await myPickService.getPicks(userId);
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
       data: picks,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
@@ -37,9 +38,9 @@ exports.saveNewMyPick = async (req, res, next) => {
 
     if (!ObjectId.isValid(userId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -49,10 +50,10 @@ exports.saveNewMyPick = async (req, res, next) => {
     const savedNewPick = await myPickService.saveNewPick({ userId, newPick });
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
       data: savedNewPick,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };

@@ -1,6 +1,12 @@
 const createError = require("http-errors");
 const { OAuth2Client } = require("google-auth-library");
 
+const {
+  ERROR_TYPE,
+  RESULT_MESSAGE,
+  ERROR_MESSAGE,
+} = require("../../constants/response");
+
 const verifyFirebaseToken = async (req, res, next) => {
   const firebaseToken = req.body.headers.Authorization.split("Bearer ")[1];
 
@@ -19,29 +25,29 @@ const verifyFirebaseToken = async (req, res, next) => {
 
     return;
   } catch (err) {
-    if (err.code === "auth/argument-error") {
+    if (err.code === ERROR_TYPE.authError) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Invalid Firebase Token",
+          message: ERROR_MESSAGE.invalidFirebaseToken,
         },
       });
 
       return;
     }
 
-    if (err.code === "auth/id-token-expired") {
+    if (err.code === ERROR_TYPE.firebaseExpiredToken) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Expired Firebase Token",
+          message: ERROR_MESSAGE.expiredFirebaseToken,
         },
       });
 
       return;
     }
 
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };
 
