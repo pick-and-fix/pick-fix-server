@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Types;
 const createError = require("http-errors");
 
 const planListService = require("../services/planList");
+const { RESULT_MESSAGE, ERROR_MESSAGE } = require("../constants/response");
 
 exports.getPlanList = async (req, res, next) => {
   try {
@@ -10,9 +11,9 @@ exports.getPlanList = async (req, res, next) => {
 
     if (!ObjectId.isValid(userId)) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Not Valid ObjectId",
+          message: ERROR_MESSAGE.notValidObject,
         },
       });
 
@@ -22,10 +23,10 @@ exports.getPlanList = async (req, res, next) => {
     const plans = await planListService.getPlans(userId);
 
     res.json({
-      result: "success",
+      result: RESULT_MESSAGE.success,
       data: plans,
     });
   } catch (err) {
-    next(createError(500, "Invalid Server Error"));
+    next(createError(500, ERROR_MESSAGE.invalidServerError));
   }
 };

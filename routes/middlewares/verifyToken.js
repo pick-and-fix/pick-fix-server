@@ -1,5 +1,11 @@
 const jwt = require("jsonwebtoken");
 
+const {
+  ERROR_MESSAGE,
+  RESULT_MESSAGE,
+  ERROR_TYPE,
+} = require("../../constants/response");
+
 const verifyToken = (req, res, next) => {
   const accessToken = req.headers.authorization.split("Bearer ")[1];
 
@@ -8,22 +14,22 @@ const verifyToken = (req, res, next) => {
 
     next();
   } catch (err) {
-    if (err.message === "jwt expired") {
+    if (err.message === ERROR_TYPE.expiredJWT) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "Token is expired",
+          message: ERROR_MESSAGE.expiredJwtToken,
         },
       });
 
       return;
     }
 
-    if (err.message === "invalid token") {
+    if (err.message === ERROR_TYPE.invalidJWT) {
       res.status(400).json({
-        result: "fail",
+        result: RESULT_MESSAGE.fail,
         error: {
-          message: "invalid Verify Token",
+          message: ERROR_MESSAGE.invalidJwtToken,
         },
       });
 

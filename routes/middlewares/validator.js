@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
 
+const { RESULT_MESSAGE } = require("../../constants/response");
+
 function validator(validations) {
   return async (req, res, next) => {
     for (const validation of validations) {
@@ -14,7 +16,7 @@ function validator(validations) {
     }
 
     res.status(400).json({
-      result: "fail",
+      result: RESULT_MESSAGE.fail,
       error: {
         message: errors.array()[0].msg,
       },
