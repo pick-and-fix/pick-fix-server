@@ -16,7 +16,6 @@ describe("My Pick Router test", function () {
   before((done) => {
     (function checkDatabaseConnection() {
       if (db.readyState === 1) {
-        console.log("Asdf");
         return done();
       }
 
