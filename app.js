@@ -1,24 +1,33 @@
+require("dotenv").config();
 const createError = require("http-errors");
-const express = require("express");
 const path = require("path");
+const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
-const index = require("./routes/index");
+const cors = require("cors");
+const mongooseLoader = require("./loaders/mongooseLoader");
+const auth = require("./routes/auth");
 const users = require("./routes/users");
+
+mongooseLoader();
 
 const app = express();
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", index);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.use("/", auth);
 app.use("/users", users);
 
 app.use(function (req, res, next) {
@@ -30,7 +39,9 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   res.status(err.status || 500);
-  res.render("error");
+  res.json({
+    error: err,
+  });
 });
 
 module.exports = app;
